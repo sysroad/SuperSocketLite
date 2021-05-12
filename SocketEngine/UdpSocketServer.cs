@@ -1,33 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketEngine.AsyncSocket;
 
 namespace SuperSocket.SocketEngine
 {
     class UdpSocketServer<TRequestInfo> : SocketServerBase, IActiveConnector
         where TRequestInfo : IRequestInfo
     {
-        private IPEndPoint m_EndPointIPv4;
+        private readonly IPEndPoint m_EndPointIPv4;
 
-        private IPEndPoint m_EndPointIPv6;
+        private readonly IPEndPoint m_EndPointIPv6;
 
-        private bool m_IsUdpRequestInfo = false;
+        private readonly bool m_IsUdpRequestInfo = false;
 
-        private IReceiveFilter<TRequestInfo> m_UdpRequestFilter;
+        private readonly IReceiveFilter<TRequestInfo> m_UdpRequestFilter;
 
         private int m_ConnectionCount = 0;
 
-        private IRequestHandler<TRequestInfo> m_RequestHandler;
+        private readonly IRequestHandler<TRequestInfo> m_RequestHandler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UdpSocketServer&lt;TRequestInfo&gt;"/> class.
@@ -108,7 +102,7 @@ namespace SuperSocket.SocketEngine
         void ProcessPackageWithSessionID(Socket listenSocket, IPEndPoint remoteEndPoint, byte[] receivedData)
         {
             TRequestInfo requestInfo;
-            
+
             string sessionID;
 
             int rest;
@@ -119,7 +113,7 @@ namespace SuperSocket.SocketEngine
             }
             catch (Exception exc)
             {
-                if(AppServer.Logger.IsErrorEnabled)
+                if (AppServer.Logger.IsErrorEnabled)
                     AppServer.Logger.Error("Failed to parse UDP package!", exc);
                 return;
             }

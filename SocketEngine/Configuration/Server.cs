@@ -1,12 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
-using System.IO;
-using System.Security.Authentication;
-using System.Text;
-using System.Xml;
-using System.Linq;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
@@ -475,9 +469,9 @@ namespace SuperSocket.SocketEngine.Configuration
             this["serverTypeName"] = value;
             return true;
         }
-		
-		
-		/// <summary>
+
+
+        /// <summary>
         /// Gets/sets the default culture for this server.
         /// </summary>
         /// <value>

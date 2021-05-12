@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SuperSocket.SocketBase.Protocol
+﻿namespace SuperSocket.SocketBase.Protocol
 {
     /// <summary>
     /// UdpRequestInfo, it is designed for passing in business session ID to udp request info

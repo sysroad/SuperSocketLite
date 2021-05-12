@@ -13,7 +13,7 @@ namespace SuperSocket.SocketEngine.Protocol
     {
         private int m_ParsedLength;
 
-        private int m_Size;
+        private readonly int m_Size;
 
         /// <summary>
         /// Gets the size of the fixed size Receive filter.

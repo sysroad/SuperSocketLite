@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
-using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
@@ -19,11 +17,11 @@ namespace SuperSocket.SocketEngine
 
         private Timer m_PerformanceTimer;
         private int m_TimerInterval;
-        private ILog m_PerfLog;
+        private readonly ILog m_PerfLog;
 
-        private IWorkItem[] m_AppServers;
+        private readonly IWorkItem[] m_AppServers;
 
-        private IWorkItem m_ServerManager;
+        private readonly IWorkItem m_ServerManager;
 
         private ProcessPerformanceCounterHelper m_Helper;
 
@@ -124,7 +122,7 @@ namespace SuperSocket.SocketEngine
                     {
                         serverStatus = s.CollectServerStatus(bootstrapStatus);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         m_PerfLog.Error("Failed to CollectServerStatus of " + s.Name, e);
 

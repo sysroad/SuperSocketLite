@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SuperSocket.SocketBase.Logging
 {
@@ -10,9 +7,11 @@ namespace SuperSocket.SocketBase.Logging
     /// </summary>
     public class ConsoleLog : ILog
     {
-        private string m_Name;
+        private readonly string m_Name;
 
         private const string m_MessageTemplate = "{0}-{1}: {2}";
+
+        private const string m_Verbose = "VERBOSE";
 
         private const string m_Debug = "DEBUG";
 
@@ -31,6 +30,11 @@ namespace SuperSocket.SocketBase.Logging
         public ConsoleLog(string name)
         {
             m_Name = name;
+        }
+
+        public bool IsVerboseEnabled
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -88,74 +92,75 @@ namespace SuperSocket.SocketBase.Logging
             get { return true; }
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="message">The message.</param>
+        public void Verbose(object message)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, message);
+        }
+
+        public void Verbose(object message, Exception exception)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, message + Environment.NewLine + exception.Message + exception.StackTrace);
+        }
+
+        public void VerboseFormat(string format, object arg0)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, string.Format(format, arg0));
+        }
+
+        public void VerboseFormat(string format, params object[] args)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, string.Format(format, args));
+        }
+
+        public void VerboseFormat(IFormatProvider provider, string format, params object[] args)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, string.Format(provider, format, args));
+        }
+
+        public void VerboseFormat(string format, object arg0, object arg1)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, string.Format(format, arg0, arg1));
+        }
+
+        public void VerboseFormat(string format, object arg0, object arg1, object arg2)
+        {
+            Console.WriteLine(m_MessageTemplate, m_Name, m_Verbose, string.Format(format, arg0, arg1, arg2));
+        }
+
+
+
+
+
         public void Debug(object message)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, message);
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="exception">The exception.</param>
         public void Debug(object message, Exception exception)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, message + Environment.NewLine + exception.Message + exception.StackTrace);
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="arg0">The arg0.</param>
         public void DebugFormat(string format, object arg0)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, string.Format(format, arg0));
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="args">The args.</param>
         public void DebugFormat(string format, params object[] args)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, string.Format(format, args));
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="provider">The provider.</param>
-        /// <param name="format">The format.</param>
-        /// <param name="args">The args.</param>
         public void DebugFormat(IFormatProvider provider, string format, params object[] args)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, string.Format(provider, format, args));
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="arg0">The arg0.</param>
-        /// <param name="arg1">The arg1.</param>
         public void DebugFormat(string format, object arg0, object arg1)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, string.Format(format, arg0, arg1));
         }
 
-        /// <summary>
-        /// Logs the debug message.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="arg0">The arg0.</param>
-        /// <param name="arg1">The arg1.</param>
-        /// <param name="arg2">The arg2.</param>
         public void DebugFormat(string format, object arg0, object arg1, object arg2)
         {
             Console.WriteLine(m_MessageTemplate, m_Name, m_Debug, string.Format(format, arg0, arg1, arg2));

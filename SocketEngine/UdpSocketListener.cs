@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
@@ -108,7 +105,7 @@ namespace SuperSocket.SocketEngine
             if (m_ListenSocket == null)
                 return;
 
-            lock(this)
+            lock (this)
             {
                 if (m_ListenSocket == null)
                     return;
@@ -117,7 +114,7 @@ namespace SuperSocket.SocketEngine
                 m_ReceiveSAE.Dispose();
                 m_ReceiveSAE = null;
 
-                if(!Platform.IsMono)
+                if (!Platform.IsMono)
                 {
                     try
                     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SuperSocket.Common
 {
@@ -34,9 +31,8 @@ namespace SuperSocket.Common
         /// <returns></returns>
         public static T GetValue<T>(this IDictionary<object, object> dictionary, object key, T defaultValue)
         {
-            object valueObj;
 
-            if (!dictionary.TryGetValue(key, out valueObj))
+            if (!dictionary.TryGetValue(key, out object valueObj))
             {
                 return defaultValue;
             }

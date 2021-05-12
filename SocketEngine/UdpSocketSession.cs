@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
-using SuperSocket.SocketBase.Protocol;
-using System.Threading;
 
 namespace SuperSocket.SocketEngine
 {
     class UdpSocketSession : SocketSession
     {
-        private Socket m_ServerSocket;
+        private readonly Socket m_ServerSocket;
 
         public UdpSocketSession(Socket serverSocket, IPEndPoint remoteEndPoint)
             : base(remoteEndPoint.ToString())

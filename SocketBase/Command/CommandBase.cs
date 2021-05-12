@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SuperSocket.SocketBase.Protocol;
+﻿using SuperSocket.SocketBase.Protocol;
 
 namespace SuperSocket.SocketBase.Command
 {
@@ -14,7 +10,7 @@ namespace SuperSocket.SocketBase.Command
     public abstract class CommandBase<TAppSession, TRequestInfo> : ICommand<TAppSession, TRequestInfo>
         where TAppSession : IAppSession, IAppSession<TAppSession, TRequestInfo>, new()
         where TRequestInfo : IRequestInfo
-    {                
+    {
         /// <summary>
         /// Executes the command.
         /// </summary>
@@ -22,7 +18,7 @@ namespace SuperSocket.SocketBase.Command
         /// <param name="requestInfo">The request info.</param>
         public abstract void ExecuteCommand(TAppSession session, TRequestInfo requestInfo);
 
-     
+
         /// <summary>
         /// Gets the name.
         /// </summary>

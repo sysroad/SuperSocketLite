@@ -11,7 +11,7 @@ namespace SuperSocket.Common
     [Serializable]
     public class ConfigurationElementBase : ConfigurationElement
     {
-        private bool m_NameRequired;
+        private readonly bool m_NameRequired;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationElementBase"/> class.

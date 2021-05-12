@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Xml;
 using System.IO;
 
@@ -183,9 +182,8 @@ namespace SuperSocket.Common
                 if (!sourceProperty.PropertyType.IsSerializable)
                     continue;
 
-                PropertyInfo targetProperty;
 
-                if (targetProperties.TryGetValue(sourceProperty.Name, out targetProperty))
+                if (targetProperties.TryGetValue(sourceProperty.Name, out PropertyInfo targetProperty))
                 {
                     if (targetProperty.CanWrite)
                     {
@@ -222,7 +220,7 @@ namespace SuperSocket.Common
 
             var configProperty = configElementType.GetProperty("CurrentConfiguration", BindingFlags.Instance | BindingFlags.Public);
 
-            if(configProperty == null)
+            if (configProperty == null)
                 configProperty = configElementType.GetProperty("Configuration", BindingFlags.Instance | BindingFlags.NonPublic);
 
             if (configProperty == null)
@@ -231,7 +229,7 @@ namespace SuperSocket.Common
             return (Configuration)configProperty.GetValue(configElement, null);
         }
 
-#if !NETSTANDARD2_0
+#if !NETSTANDARD2_0 && !NETSTANDARD2_1
         private static void ResetConfigurationForMono(AppDomain appDomain, string configFilePath)
         {
             appDomain.SetupInformation.ConfigurationFile = configFilePath;

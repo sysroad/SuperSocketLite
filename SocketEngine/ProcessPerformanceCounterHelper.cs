@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
@@ -15,9 +13,9 @@ namespace SuperSocket.SocketEngine
         private PerformanceCounter m_CpuUsagePC;
         private PerformanceCounter m_ThreadCountPC;
         private PerformanceCounter m_WorkingSetPC;
-        private int m_CpuCores = 1;
+        private readonly int m_CpuCores = 1;
 
-        private Process m_Process;
+        private readonly Process m_Process;
 
         public ProcessPerformanceCounterHelper(Process process)
         {
@@ -89,14 +87,14 @@ namespace SuperSocket.SocketEngine
 
                 using (var performanceCounter = new PerformanceCounter("Process", "ID Process", runnedInstance, true))
                 {
-                    var counterProcessId = 0;                    
+                    var counterProcessId = 0;
 
                     try
                     {
                         counterProcessId = (int)performanceCounter.RawValue;
                     }
                     catch //that process has been shutdown
-                    {                        
+                    {
                         continue;
                     }
 
@@ -112,12 +110,9 @@ namespace SuperSocket.SocketEngine
 
         public void Collect(StatusInfoCollection statusCollection)
         {
-            int availableWorkingThreads, availableCompletionPortThreads;
-            ThreadPool.GetAvailableThreads(out availableWorkingThreads, out availableCompletionPortThreads);
+            ThreadPool.GetAvailableThreads(out int availableWorkingThreads, out int availableCompletionPortThreads);
 
-            int maxWorkingThreads;
-            int maxCompletionPortThreads;
-            ThreadPool.GetMaxThreads(out maxWorkingThreads, out maxCompletionPortThreads);
+            ThreadPool.GetMaxThreads(out int maxWorkingThreads, out int maxCompletionPortThreads);
 
             var retry = false;
 

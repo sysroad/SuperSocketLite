@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net.Sockets;
 
 namespace SuperSocket.Common
@@ -13,11 +11,11 @@ namespace SuperSocket.Common
     /// </summary>
     public class BufferManager
     {
-        int m_numBytes;                 // the total number of bytes controlled by the buffer pool
+        readonly int m_numBytes;                 // the total number of bytes controlled by the buffer pool
         byte[] m_buffer;                // the underlying byte array maintained by the Buffer Manager
-        Stack<int> m_freeIndexPool;     // 
+        readonly Stack<int> m_freeIndexPool;     // 
         int m_currentIndex;
-        int m_bufferSize;
+        readonly int m_bufferSize;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BufferManager"/> class.

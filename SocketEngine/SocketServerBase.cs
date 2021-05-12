@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Security.Authentication;
-using System.Text;
-using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
 
 namespace SuperSocket.SocketEngine
 {
@@ -112,7 +103,7 @@ namespace SuperSocket.SocketEngine
         {
             var logger = this.AppServer.Logger;
 
-            if(!logger.IsErrorEnabled)
+            if (!logger.IsErrorEnabled)
                 return;
 
             logger.Error(string.Format("Listener ({0}) error: {1}", listener.EndPoint, e.Message), e);

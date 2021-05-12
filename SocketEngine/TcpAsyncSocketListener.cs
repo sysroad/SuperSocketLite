@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Logging;
 
 namespace SuperSocket.SocketEngine
 {
@@ -15,7 +10,7 @@ namespace SuperSocket.SocketEngine
     /// </summary>
     class TcpAsyncSocketListener : SocketListenerBase
     {
-        private int m_ListenBackLog;
+        private readonly int m_ListenBackLog;
 
         private Socket m_ListenSocket;
 

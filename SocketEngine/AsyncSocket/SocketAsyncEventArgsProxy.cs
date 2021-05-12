@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using SuperSocket.Common;
 using SuperSocket.SocketBase;
 
 namespace SuperSocket.SocketEngine.AsyncSocket
@@ -24,7 +20,7 @@ namespace SuperSocket.SocketEngine.AsyncSocket
         public SocketAsyncEventArgsProxy(SocketAsyncEventArgs socketEventArgs)
             : this(socketEventArgs, true)
         {
-            
+
         }
 
         public SocketAsyncEventArgsProxy(SocketAsyncEventArgs socketEventArgs, bool isRecyclable)
@@ -50,7 +46,7 @@ namespace SuperSocket.SocketEngine.AsyncSocket
             {
                 throw new ArgumentException("The last operation completed on the socket was not a receive");
             }
-        } 
+        }
 
         public void Initialize(IAsyncSocketSession socketSession)
         {

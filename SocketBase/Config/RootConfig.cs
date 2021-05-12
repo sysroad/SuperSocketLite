@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using System.Collections.Specialized;
@@ -30,20 +27,18 @@ namespace SuperSocket.SocketBase.Config
         /// </summary>
         public RootConfig()
         {
-            int maxWorkingThread, maxCompletionPortThreads;
-            ThreadPool.GetMaxThreads(out maxWorkingThread, out maxCompletionPortThreads);
+            ThreadPool.GetMaxThreads(out int maxWorkingThread, out int maxCompletionPortThreads);
             MaxWorkingThreads = maxWorkingThread;
             MaxCompletionPortThreads = maxCompletionPortThreads;
 
-            int minWorkingThread, minCompletionPortThreads;
-            ThreadPool.GetMinThreads(out minWorkingThread, out minCompletionPortThreads);
+            ThreadPool.GetMinThreads(out int minWorkingThread, out int minCompletionPortThreads);
             MinWorkingThreads = minWorkingThread;
             MinCompletionPortThreads = minCompletionPortThreads;
 
             PerformanceDataCollectInterval = 60;
         }
 
-        
+
 
         /// <summary>
         /// Gets/Sets the max working threads.
@@ -78,7 +73,7 @@ namespace SuperSocket.SocketBase.Config
         /// </value>
         public bool DisablePerformanceDataCollector { get; set; }
 
-        
+
         /// <summary>
         /// Gets/sets the log factory name.
         /// </summary>

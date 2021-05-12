@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SuperSocket.SocketBase.Provider
 {
@@ -76,7 +73,7 @@ namespace SuperSocket.SocketBase.Provider
         public ProviderFactoryInfo(ProviderKey key, string name, Type type)
             : this(key, name, type.AssemblyQualifiedName)
         {
-            
+
         }
     }
 }

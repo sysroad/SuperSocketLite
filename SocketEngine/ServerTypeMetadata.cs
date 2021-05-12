@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SuperSocket.SocketBase.Metadata;
 
 namespace SuperSocket.SocketEngine
@@ -11,6 +8,6 @@ namespace SuperSocket.SocketEngine
     {
         public StatusInfoAttribute[] StatusInfoMetadata { get; set; }
 
-        public bool IsServerManager { get; set; } 
+        public bool IsServerManager { get; set; }
     }
 }

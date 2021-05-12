@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SuperSocket.Common;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Protocol;
@@ -18,7 +16,7 @@ namespace SuperSocket.SocketBase
 
     class ConfigValueChangeNotifier : IConfigValueChangeNotifier
     {
-        Func<string, bool> m_Handler;
+        readonly Func<string, bool> m_Handler;
 
         public ConfigValueChangeNotifier(Func<string, bool> handler)
         {
@@ -33,7 +31,7 @@ namespace SuperSocket.SocketBase
     class ConfigValueChangeNotifier<TConfigOption> : IConfigValueChangeNotifier
         where TConfigOption : ConfigurationElement, new()
     {
-        Func<TConfigOption, bool> m_Handler;
+        readonly Func<TConfigOption, bool> m_Handler;
 
         public ConfigValueChangeNotifier(Func<TConfigOption, bool> handler)
         {
@@ -52,7 +50,7 @@ namespace SuperSocket.SocketBase
         where TRequestInfo : class, IRequestInfo
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
     {
-        private Dictionary<string, IConfigValueChangeNotifier> m_ConfigUpdatedNotifiers = new Dictionary<string, IConfigValueChangeNotifier>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, IConfigValueChangeNotifier> m_ConfigUpdatedNotifiers = new Dictionary<string, IConfigValueChangeNotifier>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Registers the configuration option value handler, it is used for reading configuration value and reload it after the configuration is changed;
@@ -95,7 +93,7 @@ namespace SuperSocket.SocketBase
                         .Select(i => new KeyValuePair<string, string>(oldOptions.GetKey(i), oldOptions.Get(i)))
                         .ToDictionary(p => p.Key, p => p.Value, StringComparer.OrdinalIgnoreCase);
 
-            foreach(var key in newOptions.AllKeys)
+            foreach (var key in newOptions.AllKeys)
             {
                 var newValue = newOptions[key];
 
@@ -125,9 +123,8 @@ namespace SuperSocket.SocketBase
 
         private void NotifyConfigUpdated(string key, string newValue)
         {
-            IConfigValueChangeNotifier notifier;
 
-            if (!m_ConfigUpdatedNotifiers.TryGetValue(key, out notifier))
+            if (!m_ConfigUpdatedNotifiers.TryGetValue(key, out IConfigValueChangeNotifier notifier))
                 return;
 
             try

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace SuperSocket.SocketBase.Protocol
 {
@@ -16,7 +13,7 @@ namespace SuperSocket.SocketBase.Protocol
         public CommandLineReceiveFilterFactory()
             : this(Encoding.ASCII)
         {
-            
+
         }
 
         /// <summary>

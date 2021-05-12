@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
@@ -12,7 +10,7 @@ namespace SuperSocket.SocketEngine
     {
         class ServerProxy : MarshalByRefObject, IWorkItem
         {
-            private IWorkItem m_Server;
+            private readonly IWorkItem m_Server;
 
             public ServerProxy(IWorkItem server)
             {
@@ -78,9 +76,9 @@ namespace SuperSocket.SocketEngine
             }
         }
 
-        private IBootstrap m_Bootstrap;
+        private readonly IBootstrap m_Bootstrap;
 
-        private List<IWorkItem> m_Servers = new List<IWorkItem>();
+        private readonly List<IWorkItem> m_Servers = new List<IWorkItem>();
 
         public RemoteBootstrapProxy()
         {

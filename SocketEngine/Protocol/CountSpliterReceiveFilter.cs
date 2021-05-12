@@ -53,11 +53,11 @@ namespace SuperSocket.SocketEngine.Protocol
 
             for (int i = 0; i < length; i++)
             {
-                if(readBuffer[offset + i] == m_Spliter)
+                if (readBuffer[offset + i] == m_Spliter)
                 {
                     m_SpliterFoundCount++;
 
-                    if(m_SpliterFoundCount == m_SpliterCount)
+                    if (m_SpliterFoundCount == m_SpliterCount)
                     {
                         parsedLen = i + 1;
                         break;
@@ -66,7 +66,7 @@ namespace SuperSocket.SocketEngine.Protocol
             }
 
             //Not found enougth spliter
-            if(parsedLen == 0)
+            if (parsedLen == 0)
             {
                 //Move current requestInfo's offset to orginal offset
                 if (OffsetDelta != m_Total)
@@ -81,7 +81,7 @@ namespace SuperSocket.SocketEngine.Protocol
                     m_Total += length;
                     OffsetDelta += length;
                 }
-                
+
                 rest = 0;
                 return NullRequestInfo;
             }
@@ -184,7 +184,7 @@ namespace SuperSocket.SocketEngine.Protocol
         public CountSpliterReceiveFilter(byte spliter, int spliterCount)
             : this(spliter, spliterCount, Encoding.ASCII)
         {
-            
+
         }
 
         /// <summary>

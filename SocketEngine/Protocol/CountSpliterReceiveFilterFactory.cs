@@ -25,7 +25,7 @@ namespace SuperSocket.SocketEngine.Protocol
         {
             var config = appServer.Config;
 
-            if(config.MaxRequestLength > config.ReceiveBufferSize)
+            if (config.MaxRequestLength > config.ReceiveBufferSize)
                 throw new Exception("ReceiveBufferSize cannot smaller than MaxRequestLength in this protocol.");
 
             return new TRequestFilter();
@@ -45,7 +45,7 @@ namespace SuperSocket.SocketEngine.Protocol
     /// <summary>
     /// receiveFilterFactory for CountSpliterRequestFilter
     /// </summary>
-    public class  CountSpliterReceiveFilterFactory : IReceiveFilterFactory<StringRequestInfo>
+    public class CountSpliterReceiveFilterFactory : IReceiveFilterFactory<StringRequestInfo>
     {
         private readonly byte m_Spliter;
 

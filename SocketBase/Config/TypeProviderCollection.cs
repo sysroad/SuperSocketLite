@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Configuration;
 
 namespace SuperSocket.SocketBase.Config
@@ -20,7 +17,7 @@ namespace SuperSocket.SocketBase.Config
         /// </returns>
         protected override ConfigurationElement CreateNewElement()
         {
-            return new TypeProvider() as ConfigurationElement;
+            return new TypeProvider();
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace SuperSocket.SocketBase
     /// <typeparam name="TAppSession">The type of the app session.</typeparam>
     /// <typeparam name="TRequestInfo">The type of the request info.</typeparam>
     [AppServerMetadataType(typeof(DefaultAppServerMetadata))]
-	public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppServer<TAppSession, TRequestInfo>, IRawDataProcessor<TAppSession>, IRequestHandler<TRequestInfo>, ISocketServerAccessor, IStatusInfoSource, IRemoteCertificateValidator, IActiveConnector, ISystemEndPoint, IDisposable
+    public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppServer<TAppSession, TRequestInfo>, IRawDataProcessor<TAppSession>, IRequestHandler<TRequestInfo>, ISocketServerAccessor, IStatusInfoSource, IRemoteCertificateValidator, IActiveConnector, ISystemEndPoint, IDisposable
         where TRequestInfo : class, IRequestInfo
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
     {
@@ -83,7 +83,7 @@ namespace SuperSocket.SocketBase
             get { return this.ReceiveFilterFactory; }
         }
 
-        private List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> m_CommandLoaders = new List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>>();
+        private readonly List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> m_CommandLoaders = new List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>>();
 
         private Dictionary<string, CommandInfo<ICommand<TAppSession, TRequestInfo>>> m_CommandContainer;
 
@@ -211,8 +211,7 @@ namespace SuperSocket.SocketBase
                     return false;
                 }
 
-                IEnumerable<ICommand<TAppSession, TRequestInfo>> commands;
-                if (!loader.TryLoadCommands(out commands))
+                if (!loader.TryLoadCommands(out IEnumerable<ICommand<TAppSession, TRequestInfo>> commands))
                 {
                     if (Logger.IsErrorEnabled)
                         Logger.ErrorFormat("Failed load commands from the command loader {0}.", loader.ToString());
@@ -230,7 +229,7 @@ namespace SuperSocket.SocketBase
                             return false;
                         }
 
-                        var castedCommand = c as ICommand<TAppSession, TRequestInfo>;
+                        var castedCommand = c;
 
                         if (castedCommand == null)
                         {
@@ -584,7 +583,7 @@ namespace SuperSocket.SocketBase
             SetupBasic(rootConfig, config, socketServerFactory);
 
             SetupLogFactory(logFactory);
-  
+
             Logger = CreateLogger(this.Name);
 
             if (!SetupMedium(receiveFilterFactory, connectionFilters, commandLoaders))
@@ -617,10 +616,10 @@ namespace SuperSocket.SocketBase
         public bool Setup(string ip, int port, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders = null)
         {
             return Setup(new ServerConfig
-                            {
-                                Ip = ip,
-                                Port = port
-                            },
+            {
+                Ip = ip,
+                Port = port
+            },
                           socketServerFactory,
                           receiveFilterFactory,
                           logFactory,
@@ -656,20 +655,19 @@ namespace SuperSocket.SocketBase
 
             Logger = CreateLogger(this.Name);
 
-            IEnumerable<IConnectionFilter> connectionFilters = null;
 
             if (!TryGetProviderInstances(factories, ProviderKey.ConnectionFilter, null,
                     (p, f) =>
                     {
                         var ret = p.Initialize(f.Name, this);
 
-                        if(!ret)
+                        if (!ret)
                         {
                             Logger.ErrorFormat("Failed to initialize the connection filter: {0}.", f.Name);
                         }
 
                         return ret;
-                    }, out connectionFilters))
+                    }, out IEnumerable<IConnectionFilter> connectionFilters))
             {
                 return false;
             }
@@ -746,8 +744,7 @@ namespace SuperSocket.SocketBase
         private IEnumerable<TProvider> GetProviderInstances<TProvider>(ProviderFactoryInfo[] factories, ProviderKey key, Func<Type, object> creator)
             where TProvider : class
         {
-            IEnumerable<TProvider> providers;
-            TryGetProviderInstances<TProvider>(factories, key, creator, (p, f) => true, out providers);
+            TryGetProviderInstances<TProvider>(factories, key, creator, (p, f) => true, out IEnumerable<TProvider> providers);
             return providers;
         }
 
@@ -762,7 +759,7 @@ namespace SuperSocket.SocketBase
             //NLogLogFactory is default log factory
             if (LogFactory == null)
             {
-                LogFactory = new NLogLogFactory();
+                LogFactory = new SerilogLogFactory();
             }
 
             return true;
@@ -798,8 +795,7 @@ namespace SuperSocket.SocketBase
         {
             if (!string.IsNullOrEmpty(config.Security))
             {
-                SslProtocols configProtocol;
-                if (!config.Security.TryParseEnum<SslProtocols>(true, out configProtocol))
+                if (!config.Security.TryParseEnum<SslProtocols>(true, out SslProtocols configProtocol))
                 {
                     if (Logger.IsErrorEnabled)
                         Logger.ErrorFormat("Failed to parse '{0}' to SslProtocol!", config.Security);
@@ -822,14 +818,14 @@ namespace SuperSocket.SocketBase
                 {
                     Certificate = certificate;
                 }
-                else if(BasicSecurity != SslProtocols.None)
+                else if (BasicSecurity != SslProtocols.None)
                 {
                     if (Logger.IsErrorEnabled)
                         Logger.Error("Certificate is required in this security mode!");
 
                     return false;
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -913,7 +909,7 @@ namespace SuperSocket.SocketBase
             else if ("IPv6Any".Equals(ip, StringComparison.OrdinalIgnoreCase))
                 return IPAddress.IPv6Any;
             else
-               return IPAddress.Parse(ip);
+                return IPAddress.Parse(ip);
         }
 
         /// <summary>
@@ -1149,9 +1145,8 @@ namespace SuperSocket.SocketBase
         /// <returns></returns>
         private CommandInfo<ICommand<TAppSession, TRequestInfo>> GetCommandByName(string commandName)
         {
-            CommandInfo<ICommand<TAppSession, TRequestInfo>> commandProxy;
 
-            if (m_CommandContainer.TryGetValue(commandName, out commandProxy))
+            if (m_CommandContainer.TryGetValue(commandName, out CommandInfo<ICommand<TAppSession, TRequestInfo>> commandProxy))
                 return commandProxy;
             else
                 return null;
@@ -1238,7 +1233,7 @@ namespace SuperSocket.SocketBase
                             if (commandContext.Cancel)
                             {
                                 cancelled = true;
-                                if(Logger.IsInfoEnabled)
+                                if (Logger.IsInfoEnabled)
                                     Logger.Info(session, string.Format("The executing of the command {0} was cancelled by the command filter {1}.", command.Name, filter.GetType().ToString()));
                                 break;
                             }
@@ -1275,12 +1270,14 @@ namespace SuperSocket.SocketBase
                         }
                     }
 
-                    if(!cancelled)
+                    if (!cancelled)
                     {
                         session.PrevCommand = requestInfo.Key;
 
-                        if (Config.LogCommand && Logger.IsInfoEnabled)
-                            Logger.Info(session, string.Format("Command - {0}", requestInfo.Key));
+                        if (Config.LogCommand && Logger.IsVerboseEnabled)
+                        {
+                            Logger.Verbose(session, string.Format("Command - {0}", requestInfo.Key));
+                        }
                     }
                 }
                 else
@@ -1302,12 +1299,14 @@ namespace SuperSocket.SocketBase
                 {
                     session.InternalHandleExcetion(e);
                 }
-                
+
                 session.PrevCommand = requestInfo.Key;
                 session.LastActiveTime = DateTime.Now;
 
-                if (Config.LogCommand && Logger.IsInfoEnabled)
-                    Logger.Info(session, string.Format("Command - {0}", requestInfo.Key));
+                if (Config.LogCommand && Logger.IsVerboseEnabled)
+                {
+                    Logger.Verbose(session, string.Format("Command - {0}", requestInfo.Key));
+                }
             }
 
             Interlocked.Increment(ref m_TotalHandledRequests);
@@ -1379,7 +1378,7 @@ namespace SuperSocket.SocketBase
                 return NullAppSession;
 
             var appSession = CreateAppSession(socketSession);
-            
+
             appSession.Initialize(this, socketSession);
 
             return appSession;
@@ -1409,8 +1408,8 @@ namespace SuperSocket.SocketBase
 
             appSession.SocketSession.Closed += OnSocketSessionClosed;
 
-            //if (Config.LogBasicSessionActivity && Logger.IsInfoEnabled)
-                //Logger.Info(session, "A new session connected!");
+            if (Config.LogBasicSessionActivity && Logger.IsInfoEnabled)
+                Logger.Info(session, "A new session connected!");
 
             OnNewSessionConnected(appSession);
             return true;
@@ -1451,7 +1450,7 @@ namespace SuperSocket.SocketBase
                 return;
             }
 
-            Task.Run(() => handler(session));            
+            Task.Run(() => handler(session));
             //var handler = m_NewSessionConnected;
             //if (handler == null)
             //    return;
@@ -1491,7 +1490,7 @@ namespace SuperSocket.SocketBase
         {
             //Even if LogBasicSessionActivity is false, we also log the unexpected closing because the close reason probably be useful
             //if (Logger.IsInfoEnabled && (Config.LogBasicSessionActivity || (reason != CloseReason.ServerClosing && reason != CloseReason.ClientClosing && reason != CloseReason.ServerShutdown && reason != CloseReason.SocketError)))
-                //Logger.Info(session, string.Format("This session was closed for {0}!", reason));
+            //Logger.Info(session, string.Format("This session was closed for {0}!", reason));
 
             var appSession = session.AppSession as TAppSession;
             appSession.Connected = false;
@@ -1519,7 +1518,7 @@ namespace SuperSocket.SocketBase
 
             if (handler != null)
             {
-                Task.Run(() => handler(session, reason)); 
+                Task.Run(() => handler(session, reason));
             }
 
             session.OnSessionClosed(reason);
@@ -1593,11 +1592,11 @@ namespace SuperSocket.SocketBase
         /// <returns></returns>
         public string GetFilePath(string relativeFilePath)
         {
-            var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeFilePath);                        
+            var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeFilePath);
             return filePath;
         }
 
-        
+
 
         /// <summary>
         /// Connect the remote endpoint actively.
@@ -1627,9 +1626,9 @@ namespace SuperSocket.SocketBase
             return ((IActiveConnector)this).ActiveConnect(targetEndPoint, null);
         }
 
-        
 
-        
+
+
         /// <summary>
         /// Transfers the system message
         /// </summary>
@@ -1650,7 +1649,7 @@ namespace SuperSocket.SocketBase
 
         }
 
-        
+
         private StatusInfoCollection m_ServerStatus;
 
         StatusInfoAttribute[] IStatusInfoSource.GetServerStatusMetadata()
@@ -1710,7 +1709,7 @@ namespace SuperSocket.SocketBase
 
 
 
-        
+
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
@@ -1721,7 +1720,7 @@ namespace SuperSocket.SocketBase
                 Stop();
         }
 
-        
+
 
 
         partial void SetDefaultCulture(IRootConfig rootConfig, IServerConfig config)

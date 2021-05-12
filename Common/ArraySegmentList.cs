@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SuperSocket.Common
@@ -12,7 +11,7 @@ namespace SuperSocket.Common
     public class ArraySegmentList<T> : IList<T>
         where T : IEquatable<T>
     {
-        private IList<ArraySegmentEx<T>> m_Segments;
+        private readonly IList<ArraySegmentEx<T>> m_Segments;
 
         internal IList<ArraySegmentEx<T>> Segments
         {
@@ -95,9 +94,8 @@ namespace SuperSocket.Common
         {
             get
             {
-                ArraySegmentEx<T> segment;
 
-                var internalIndex = GetElementInternalIndex(index, out segment);
+                var internalIndex = GetElementInternalIndex(index, out ArraySegmentEx<T> segment);
 
                 if (internalIndex < 0)
                     throw new IndexOutOfRangeException();
@@ -106,9 +104,8 @@ namespace SuperSocket.Common
             }
             set
             {
-                ArraySegmentEx<T> segment;
 
-                var internalIndex = GetElementInternalIndex(index, out segment);
+                var internalIndex = GetElementInternalIndex(index, out ArraySegmentEx<T> segment);
 
                 if (internalIndex < 0)
                     throw new IndexOutOfRangeException();
@@ -646,8 +643,6 @@ namespace SuperSocket.Common
 
             var charsBuffer = new char[encoding.GetMaxCharCount(this.Count)];
 
-            int bytesUsed, charsUsed;
-            bool completed;
             int totalBytes = 0;
             int totalChars = 0;
 
@@ -679,7 +674,7 @@ namespace SuperSocket.Common
                     toBeDecoded = Math.Min(segment.Count - offset + segment.From, toBeDecoded);
                 }
 
-                decoder.Convert(segment.Array, decodeOffset, toBeDecoded, charsBuffer, totalChars, charsBuffer.Length - totalChars, flush, out bytesUsed, out charsUsed, out completed);
+                decoder.Convert(segment.Array, decodeOffset, toBeDecoded, charsBuffer, totalChars, charsBuffer.Length - totalChars, flush, out int bytesUsed, out int charsUsed, out bool completed);
                 totalChars += charsUsed;
                 totalBytes += bytesUsed;
 
@@ -699,8 +694,7 @@ namespace SuperSocket.Common
         public void DecodeMask(byte[] mask, int offset, int length)
         {
             int maskLen = mask.Length;
-            var startSegmentIndex = 0;
-            var startSegment = QuickSearchSegment(0, Segments.Count - 1, offset, out startSegmentIndex);
+            var startSegment = QuickSearchSegment(0, Segments.Count - 1, offset, out int startSegmentIndex);
 
             var shouldDecode = Math.Min(length, startSegment.Count - offset + startSegment.From);
             var from = offset - startSegment.From + startSegment.Offset;

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketEngine.Configuration;
 using SuperSocket.SocketBase.Config;
 using System.Configuration;
 
@@ -51,11 +47,11 @@ namespace SuperSocket.SocketEngine
             if (configSection == null)//to keep compatible with old version
                 configSection = ConfigurationManager.GetSection("socketServer");
 
-            if(configSection == null)
+            if (configSection == null)
                 throw new ConfigurationErrorsException("Missing 'superSocket' or 'socketServer' configuration section.");
 
             var configSource = configSection as IConfigurationSource;
-            if(configSource == null)
+            if (configSource == null)
                 throw new ConfigurationErrorsException("Invalid 'superSocket' or 'socketServer' configuration section.");
 
             return CreateBootstrap(configSource);

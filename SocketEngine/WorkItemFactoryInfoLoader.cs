@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Provider;
-using SuperSocket.SocketEngine.Configuration;
-using SuperSocket.SocketBase.Metadata;
 
 namespace SuperSocket.SocketEngine
 {
@@ -14,7 +11,7 @@ namespace SuperSocket.SocketEngine
     {
         private ProviderFactoryInfo m_DefaultLogFactory;
 
-        private IConfigurationSource m_Config;
+        private readonly IConfigurationSource m_Config;
 
         public WorkItemFactoryInfoLoader(IConfigurationSource config, ILogFactory passedInLogFactory)
             : this(config)
@@ -37,7 +34,7 @@ namespace SuperSocket.SocketEngine
 
             if (string.IsNullOrEmpty(m_Config.LogFactory))
             {
-                m_DefaultLogFactory = new ProviderFactoryInfo(ProviderKey.LogFactory, string.Empty, typeof(NLogLogFactory));
+                m_DefaultLogFactory = new ProviderFactoryInfo(ProviderKey.LogFactory, string.Empty, typeof(SerilogLogFactory));
                 return m_DefaultLogFactory;
             }
 
@@ -129,7 +126,7 @@ namespace SuperSocket.SocketEngine
                 factories.Add(workItemFactory.SocketServerFactory);
 
                 //Initialize connection filters
-                if(!string.IsNullOrEmpty(serverConfig.ConnectionFilter))
+                if (!string.IsNullOrEmpty(serverConfig.ConnectionFilter))
                 {
                     var currentFactories = GetSelectedFactories(connectionFilterFactories, serverConfig.ConnectionFilter);
 
@@ -167,7 +164,7 @@ namespace SuperSocket.SocketEngine
                         workItemFactory.LogFactory = GetBootstrapLogFactory();
                 }
 
-              factories.Add(workItemFactory.LogFactory);
+                factories.Add(workItemFactory.LogFactory);
 
                 //Initialize Receive filter factory
                 if (!string.IsNullOrEmpty(serverConfig.ReceiveFilterFactory))
@@ -210,7 +207,7 @@ namespace SuperSocket.SocketEngine
         {
             var loadedFactoryPassedIn = false;
 
-            if(loadedFactory != null && !string.IsNullOrEmpty(loadedFactory.Name))
+            if (loadedFactory != null && !string.IsNullOrEmpty(loadedFactory.Name))
                 loadedFactoryPassedIn = true;
 
             var factories = new List<ProviderFactoryInfo>();

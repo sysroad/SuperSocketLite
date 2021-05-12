@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SuperSocket.Common
 {
@@ -31,9 +28,8 @@ namespace SuperSocket.Common
             if (string.IsNullOrEmpty(source))
                 return defaultValue;
 
-            int value;
 
-            if (!int.TryParse(source, out value))
+            if (!int.TryParse(source, out int value))
                 value = defaultValue;
 
             return value;
@@ -60,9 +56,8 @@ namespace SuperSocket.Common
             if (string.IsNullOrEmpty(source))
                 return defaultValue;
 
-            long value;
 
-            if (!long.TryParse(source, out value))
+            if (!long.TryParse(source, out long value))
                 value = defaultValue;
 
             return value;
@@ -89,9 +84,8 @@ namespace SuperSocket.Common
             if (string.IsNullOrEmpty(source))
                 return defaultValue;
 
-            short value;
 
-            if (!short.TryParse(source, out value))
+            if (!short.TryParse(source, out short value))
                 value = defaultValue;
 
             return value;
@@ -118,9 +112,8 @@ namespace SuperSocket.Common
             if (string.IsNullOrEmpty(source))
                 return defaultValue;
 
-            decimal value;
 
-            if (!decimal.TryParse(source, out value))
+            if (!decimal.TryParse(source, out decimal value))
                 value = defaultValue;
 
             return value;
@@ -147,9 +140,8 @@ namespace SuperSocket.Common
             if (string.IsNullOrEmpty(source))
                 return defaultValue;
 
-            DateTime value;
 
-            if (!DateTime.TryParse(source, out value))
+            if (!DateTime.TryParse(source, out DateTime value))
                 value = defaultValue;
 
             return value;
@@ -176,9 +168,8 @@ namespace SuperSocket.Common
             if (string.IsNullOrEmpty(source))
                 return defaultValue;
 
-            bool value;
 
-            if (!bool.TryParse(source, out value))
+            if (!bool.TryParse(source, out bool value))
                 value = defaultValue;
 
             return value;

@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Configuration;
-using System.Security.Authentication;
 using System.Collections.Specialized;
 
 namespace SuperSocket.SocketBase.Config
@@ -165,7 +162,7 @@ namespace SuperSocket.SocketBase.Config
         /// Gets the interval to taking snapshot for all live sessions.
         /// </summary>
         int SessionSnapshotInterval { get; }
-        
+
         /// <summary>
         /// Gets the connection filters used by this server instance.
         /// </summary>
@@ -269,7 +266,7 @@ namespace SuperSocket.SocketBase.Config
         /// </value>
         IEnumerable<ICommandAssemblyConfig> CommandAssemblies { get; }
 
-        
+
         /// <summary>
         /// Gets the default culture for this server.
         /// </summary>

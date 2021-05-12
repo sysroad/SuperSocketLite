@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security.Authentication;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Command;
-using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Security;
 
 namespace SuperSocket.SocketBase
 {
@@ -91,7 +81,7 @@ namespace SuperSocket.SocketBase
         public AppServer()
             : base()
         {
-            
+
         }
 
         /// <summary>
@@ -101,7 +91,7 @@ namespace SuperSocket.SocketBase
         protected AppServer(IReceiveFilterFactory<TRequestInfo> protocol)
             : base(protocol)
         {
-   
+
         }
 
         internal override IReceiveFilterFactory<TRequestInfo> CreateDefaultReceiveFilterFactory()
@@ -124,7 +114,7 @@ namespace SuperSocket.SocketBase
             if (Config.ClearIdleSession)
                 StartClearSessionTimer();
 
-            if(Config.CollectSendIntervalMillSec > 0)
+            if (Config.CollectSendIntervalMillSec > 0)
             {
                 StartCollectSendSessionTimer();
             }
@@ -132,7 +122,7 @@ namespace SuperSocket.SocketBase
             return true;
         }
 
-        private ConcurrentDictionary<string, TAppSession> m_SessionDict = new ConcurrentDictionary<string, TAppSession>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, TAppSession> m_SessionDict = new ConcurrentDictionary<string, TAppSession>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Registers the session into the session container.
@@ -172,8 +162,7 @@ namespace SuperSocket.SocketBase
             if (string.IsNullOrEmpty(sessionID))
                 return NullAppSession;
 
-            TAppSession targetSession;
-            m_SessionDict.TryGetValue(sessionID, out targetSession);
+            m_SessionDict.TryGetValue(sessionID, out TAppSession targetSession);
             return targetSession;
         }
 
@@ -188,8 +177,7 @@ namespace SuperSocket.SocketBase
 
             if (!string.IsNullOrEmpty(sessionID))
             {
-                TAppSession removedSession;
-                if (!m_SessionDict.TryRemove(sessionID, out removedSession))
+                if (!m_SessionDict.TryRemove(sessionID, out TAppSession removedSession))
                 {
                     if (Logger.IsErrorEnabled)
                         Logger.Error(session, "Failed to remove this session, Because it has't been in session container!");
@@ -240,7 +228,7 @@ namespace SuperSocket.SocketBase
                     {
                         return;
                     }
-                    
+
                     System.Threading.Tasks.Parallel.ForEach(sessionSource, s =>
                     {
                         var session = s.Value;
@@ -266,8 +254,8 @@ namespace SuperSocket.SocketBase
                 }
             }
         }
-   
-         
+
+
 
 
         private System.Threading.Timer m_ClearIdleSessionTimer = null;
@@ -307,7 +295,7 @@ namespace SuperSocket.SocketBase
                 }
                 catch (Exception e)
                 {
-                    if(Logger.IsErrorEnabled)
+                    if (Logger.IsErrorEnabled)
                         Logger.Error("Clear idle session error!", e);
                 }
                 finally
@@ -328,9 +316,9 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        
 
-        
+
+
 
         private System.Threading.Timer m_SessionSnapshotTimer = null;
 
@@ -351,9 +339,9 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        
 
-        
+
+
 
         /// <summary>
         /// Gets the matched sessions from sessions snapshot.
@@ -415,11 +403,9 @@ namespace SuperSocket.SocketBase
 
                 for (var i = 0; i < tasks.Length; i++)
                 {
-                    tasks[i] = Task.Factory.StartNew((s) =>
+                    tasks[i] = Task.Factory.StartNew(s =>
                     {
-                        var session = s as TAppSession;
-
-                        if (session != null)
+                        if (s is TAppSession session)
                         {
                             session.Close(CloseReason.ServerShutdown);
                         }
@@ -430,7 +416,5 @@ namespace SuperSocket.SocketBase
                 Task.WaitAll(tasks);
             }
         }
-
-        
     }
 }

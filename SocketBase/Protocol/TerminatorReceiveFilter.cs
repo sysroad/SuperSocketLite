@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using SuperSocket.Common;
 
@@ -108,7 +106,7 @@ namespace SuperSocket.SocketBase.Protocol
 
             if (findLen > 0)
             {
-                if(this.BufferSegments != null && this.BufferSegments.Count > 0)
+                if (this.BufferSegments != null && this.BufferSegments.Count > 0)
                 {
                     this.AddArraySegment(readBuffer, offset - m_ParsedLengthInBuffer, findLen + m_ParsedLengthInBuffer, toBeCopied);
                     requestInfo = ProcessMatchedRequest(BufferSegments, 0, BufferSegments.Count);
@@ -165,7 +163,7 @@ namespace SuperSocket.SocketBase.Protocol
 
             InternalReset();
 
-            if(rest == 0)
+            if (rest == 0)
             {
                 m_OffsetDelta = 0;
             }
@@ -193,7 +191,7 @@ namespace SuperSocket.SocketBase.Protocol
             m_OffsetDelta = 0;
         }
 
-        
+
         private TRequestInfo ProcessMatchedRequest(ArraySegmentList data, int offset, int length)
         {
             var targetData = data.ToArrayData(offset, length);
@@ -209,7 +207,7 @@ namespace SuperSocket.SocketBase.Protocol
         /// <returns></returns>
         protected abstract TRequestInfo ProcessMatchedRequest(byte[] data, int offset, int length);
 
-        
+
         private int m_OffsetDelta;
 
         int IOffsetAdapter.OffsetDelta
@@ -234,7 +232,7 @@ namespace SuperSocket.SocketBase.Protocol
         public TerminatorReceiveFilter(byte[] terminator, Encoding encoding)
             : this(terminator, encoding, BasicRequestInfoParser.DefaultInstance)
         {
-            
+
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="TerminatorReceiveFilter"/> class.
@@ -258,7 +256,7 @@ namespace SuperSocket.SocketBase.Protocol
         /// <returns></returns>
         protected override StringRequestInfo ProcessMatchedRequest(byte[] data, int offset, int length)
         {
-            if(length == 0)
+            if (length == 0)
                 return m_RequestParser.ParseRequestInfo(string.Empty);
 
             return m_RequestParser.ParseRequestInfo(m_Encoding.GetString(data, offset, length));

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
-using System.Collections;
 
 namespace SuperSocket.SocketBase
 {
@@ -65,9 +62,8 @@ namespace SuperSocket.SocketBase
         {
             get
             {
-                object value;
 
-                if (m_Values.TryGetValue(name, out value))
+                if (m_Values.TryGetValue(name, out object value))
                     return value;
 
                 return null;
@@ -88,9 +84,8 @@ namespace SuperSocket.SocketBase
         public T GetValue<T>(string name, T defaultValue)
             where T : struct
         {
-            object value;
 
-            if (m_Values.TryGetValue(name, out value))
+            if (m_Values.TryGetValue(name, out object value))
                 return (T)value;
 
             return defaultValue;

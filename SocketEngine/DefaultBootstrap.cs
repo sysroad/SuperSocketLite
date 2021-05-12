@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization.Formatters;
-using System.Text;
-using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Metadata;
-using SuperSocket.SocketBase.Provider;
 using SuperSocket.SocketEngine.Configuration;
 
 namespace SuperSocket.SocketEngine
@@ -35,7 +30,7 @@ namespace SuperSocket.SocketEngine
         /// <summary>
         /// Global configuration
         /// </summary>
-        private IConfigurationSource m_Config;
+        private readonly IConfigurationSource m_Config;
 
         /// <summary>
         /// Global log
@@ -114,7 +109,7 @@ namespace SuperSocket.SocketEngine
         /// </summary>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IEnumerable<IWorkItem> appServers)
-            : this(new RootConfig(), appServers, new NLogLogFactory()) 
+            : this(new RootConfig(), appServers, new SerilogLogFactory())
         {
 
         }
@@ -125,7 +120,7 @@ namespace SuperSocket.SocketEngine
         /// <param name="rootConfig">The root config.</param>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IRootConfig rootConfig, IEnumerable<IWorkItem> appServers)
-            : this(rootConfig, appServers, new NLogLogFactory())  
+            : this(rootConfig, appServers, new SerilogLogFactory())
         {
 
         }
@@ -144,7 +139,7 @@ namespace SuperSocket.SocketEngine
             if (appServers == null)
                 throw new ArgumentNullException("appServers");
 
-            if(!appServers.Any())
+            if (!appServers.Any())
                 throw new ArgumentException("appServers must have one item at least", "appServers");
 
             if (logFactory == null)
@@ -275,9 +270,8 @@ namespace SuperSocket.SocketEngine
             {
                 var endPointKey = serverConfig.Name + "_" + serverConfig.Port;
 
-                IPEndPoint instanceEndpoint;
 
-                if(!listenEndPointReplacement.TryGetValue(endPointKey, out instanceEndpoint))
+                if (!listenEndPointReplacement.TryGetValue(endPointKey, out IPEndPoint instanceEndpoint))
                 {
                     throw new Exception(string.Format("Failed to find Input Endpoint configuration {0}!", endPointKey));
                 }
@@ -296,9 +290,8 @@ namespace SuperSocket.SocketEngine
 
                     var endPointKey = serverConfig.Name + "_" + listener.Port;
 
-                    IPEndPoint instanceEndpoint;
 
-                    if (!listenEndPointReplacement.TryGetValue(endPointKey, out instanceEndpoint))
+                    if (!listenEndPointReplacement.TryGetValue(endPointKey, out IPEndPoint instanceEndpoint))
                     {
                         throw new Exception(string.Format("Failed to find Input Endpoint configuration {0}!", endPointKey));
                     }
@@ -422,7 +415,7 @@ namespace SuperSocket.SocketEngine
                 {
                     serverManager = appServer;
                 }
-                
+
 
                 m_AppServers.Add(appServer);
             }
@@ -524,7 +517,7 @@ namespace SuperSocket.SocketEngine
                 }
                 else
                 {
-                    succeeded++;                    
+                    succeeded++;
                 }
             }
 
@@ -565,7 +558,7 @@ namespace SuperSocket.SocketEngine
             {
                 if (server.State == ServerState.Running)
                 {
-                    server.Stop();                    
+                    server.Stop();
                 }
             }
 
@@ -578,7 +571,7 @@ namespace SuperSocket.SocketEngine
             }
         }
 
-        
+
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
@@ -688,6 +681,6 @@ namespace SuperSocket.SocketEngine
 
             return server;
         }
-                
+
     }
 }

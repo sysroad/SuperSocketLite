@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace SuperSocket.Common
 {
@@ -9,10 +7,9 @@ namespace SuperSocket.Common
     {
         Int32 ReadPos = 0;
         Int32 WritePos = 0;
-        Int32 BufferSize = 0;
-        byte[] mBuffer = null;
-
-        Int32 MinumBufferSize = 0;
+        readonly Int32 BufferSize = 0;
+        readonly byte[] mBuffer = null;
+        readonly Int32 MinumBufferSize = 0;
 
         public ReuseLockBaseBuffer(int bufferSize)
         {
@@ -32,10 +29,10 @@ namespace SuperSocket.Common
 
         public bool Copy(byte[] source, int pos, int count)
         {
-            lock(mBuffer)
+            lock (mBuffer)
             {
                 var expectedLength = WritePos + count;
-                if(BufferSize <= expectedLength)
+                if (BufferSize <= expectedLength)
                 {
                     return false;
                 }
@@ -73,7 +70,7 @@ namespace SuperSocket.Common
                 ReadPos += size;
                 currenDataSize = WritePos - ReadPos;
 
-                if(currenDataSize < ReadPos)
+                if (currenDataSize < ReadPos)
                 {
                     Buffer.BlockCopy(mBuffer, ReadPos, mBuffer, 0, currenDataSize);
                     ReadPos = 0;

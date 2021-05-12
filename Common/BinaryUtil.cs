@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
 
 namespace SuperSocket.Common
 {
@@ -56,8 +53,7 @@ namespace SuperSocket.Common
         public static int? SearchMark<T>(this IList<T> source, T[] mark)
             where T : IEquatable<T>
         {
-            int parsedLength;
-            return SearchMark(source, 0, source.Count, mark, 0, out parsedLength);
+            return SearchMark(source, 0, source.Count, mark, 0, out int parsedLength);
         }
 
         /// <summary>
@@ -72,8 +68,7 @@ namespace SuperSocket.Common
         public static int? SearchMark<T>(this IList<T> source, int offset, int length, T[] mark)
             where T : IEquatable<T>
         {
-            int parsedLength;
-            return SearchMark(source, offset, length, mark, 0, out parsedLength);
+            return SearchMark(source, offset, length, mark, 0, out int parsedLength);
         }
 
         /// <summary>
@@ -105,8 +100,7 @@ namespace SuperSocket.Common
         public static int? SearchMark<T>(this IList<T> source, int offset, int length, T[] mark, int matched)
             where T : IEquatable<T>
         {
-            int parsedLength;
-            return source.SearchMark(offset, length, mark, matched, out parsedLength);
+            return source.SearchMark(offset, length, mark, matched, out int parsedLength);
         }
 
         /// <summary>
@@ -243,8 +237,7 @@ namespace SuperSocket.Common
         public static int SearchMark<T>(this IList<T> source, int offset, int length, SearchMarkState<T> searchState)
             where T : IEquatable<T>
         {
-            var parsedLen = 0;
-            return SearchMark(source, offset, length, searchState, out parsedLen);
+            return SearchMark(source, offset, length, searchState, out int parsedLen);
         }
 
         /// <summary>

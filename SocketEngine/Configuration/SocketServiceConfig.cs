@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
 using SuperSocket.Common;
-using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 using System.Collections.Specialized;
 
@@ -162,7 +159,7 @@ namespace SuperSocket.SocketEngine.Configuration
             }
         }
 
-        
+
         /// <summary>
         /// Gets the logfactory name of the bootstrap.
         /// </summary>
@@ -292,9 +289,9 @@ namespace SuperSocket.SocketEngine.Configuration
                 return this.CommandLoaders;
             }
         }
-		
-		
-		/// <summary>
+
+
+        /// <summary>
         /// Gets/sets the default culture for all server instances.
         /// </summary>
         /// <value>

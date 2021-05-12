@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketBase.Config;
-using System.Net;
 
 namespace SuperSocket.SocketEngine
 {
@@ -34,11 +30,11 @@ namespace SuperSocket.SocketEngine
             if (config == null)
                 throw new ArgumentNullException("config");
 
-            switch(config.Mode)
+            switch (config.Mode)
             {
-                case(SocketMode.Tcp):
+                case (SocketMode.Tcp):
                     return new AsyncSocketServer(appServer, listeners);
-                case(SocketMode.Udp):
+                case (SocketMode.Udp):
                     return new UdpSocketServer<TRequestInfo>(appServer, listeners);
                 default:
                     throw new NotSupportedException("Unsupported SocketMode:" + config.Mode);

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace SuperSocket.Common
@@ -17,7 +15,7 @@ namespace SuperSocket.Common
 
         private int m_CurrentCount = 0;
 
-        private ArraySegment<byte>[] m_GlobalQueue;
+        private readonly ArraySegment<byte>[] m_GlobalQueue;
 
         private static ArraySegment<byte> m_Null = default(ArraySegment<byte>);
 
@@ -97,9 +95,8 @@ namespace SuperSocket.Common
 
             while (!m_ReadOnly)
             {
-                bool conflict = false;
 
-                if (TryEnqueue(item, out conflict, trackID))
+                if (TryEnqueue(item, out bool conflict, trackID))
                 {
                     Interlocked.Decrement(ref m_UpdatingCount);
                     return true;
@@ -127,11 +124,10 @@ namespace SuperSocket.Common
 
             Interlocked.Increment(ref m_UpdatingCount);
 
-            bool conflict;
 
             while (!m_ReadOnly)
             {
-                if (TryEnqueue(items, out conflict, trackID))
+                if (TryEnqueue(items, out bool conflict, trackID))
                 {
                     Interlocked.Decrement(ref m_UpdatingCount);
                     return true;
@@ -353,7 +349,7 @@ namespace SuperSocket.Common
                 m_TrackID = 1;
             else
                 m_TrackID++;
-            
+
             for (var i = 0; i < m_CurrentCount; i++)
             {
                 m_GlobalQueue[m_Offset + i] = m_Null;
@@ -472,7 +468,7 @@ namespace SuperSocket.Common
     /// </summary>
     public class SendingQueueSourceCreator : ISmartPoolSourceCreator<SendingQueue>
     {
-        private int m_SendingQueueSize;
+        private readonly int m_SendingQueueSize;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SendingQueueSourceCreator" /> class.

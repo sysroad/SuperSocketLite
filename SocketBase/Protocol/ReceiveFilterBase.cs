@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SuperSocket.Common;
+﻿using SuperSocket.Common;
 
 namespace SuperSocket.SocketBase.Protocol
 {
@@ -49,7 +45,7 @@ namespace SuperSocket.SocketBase.Protocol
             m_BufferSegments = previousRequestFilter.BufferSegments;
         }
 
-        
+
 
 
         /// <summary>
@@ -83,7 +79,7 @@ namespace SuperSocket.SocketBase.Protocol
         /// </value>
         public IReceiveFilter<TRequestInfo> NextReceiveFilter { get; protected set; }
 
-        
+
 
         /// <summary>
         /// Adds the array segment.
@@ -110,7 +106,7 @@ namespace SuperSocket.SocketBase.Protocol
         /// </summary>
         public virtual void Reset()
         {
-            if(m_BufferSegments != null && m_BufferSegments.Count > 0)
+            if (m_BufferSegments != null && m_BufferSegments.Count > 0)
                 m_BufferSegments.ClearSegements();
         }
 

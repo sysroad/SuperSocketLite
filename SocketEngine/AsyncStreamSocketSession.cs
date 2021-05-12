@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine.AsyncSocket;
 
 namespace SuperSocket.SocketEngine
@@ -53,11 +48,11 @@ namespace SuperSocket.SocketEngine
 
     class AsyncStreamSocketSession : SocketSession, IAsyncSocketSessionBase, INegotiateSocketSession
     {
-        private byte[] m_ReadBuffer;
+        private readonly byte[] m_ReadBuffer;
         private int m_Offset;
         private int m_Length;
 
-        private bool m_IsReset;
+        private readonly bool m_IsReset;
 
         public AsyncStreamSocketSession(Socket client, SslProtocols security, SocketAsyncEventArgsProxy socketAsyncProxy)
             : this(client, security, socketAsyncProxy, false)
@@ -170,7 +165,7 @@ namespace SuperSocket.SocketEngine
         private SslStream CreateSslStream(ICertificateConfig certConfig)
         {
             //Enable client certificate function only if ClientCertificateRequired is true in the configuration
-            if(!certConfig.ClientCertificateRequired)
+            if (!certConfig.ClientCertificateRequired)
                 return new SslStream(new NetworkStream(Client), false);
 
             //Subscribe the client validation callback
@@ -198,21 +193,22 @@ namespace SuperSocket.SocketEngine
             var certConfig = AppSession.Config.Certificate;
             var secureProtocol = SecureProtocol;
 
+            // .Net 버전이 올라가면서 Default,Sslx 가 deprecated 됨
             switch (secureProtocol)
             {
                 case (SslProtocols.None):
                     m_Stream = new NetworkStream(Client);
                     break;
-                case (SslProtocols.Default):
+                //case (SslProtocols.Default):
                 case (SslProtocols.Tls):
-                case (SslProtocols.Ssl3):
+                //case (SslProtocols.Ssl3):
                     SslStream sslStream = CreateSslStream(certConfig);
-                    result = sslStream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Default, false, asyncCallback, sslStream);
+                    result = sslStream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Tls, false, asyncCallback, sslStream);
                     break;
-                case (SslProtocols.Ssl2):
-                    SslStream ssl2Stream = CreateSslStream(certConfig);
-                    result = ssl2Stream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Ssl2, false, asyncCallback, ssl2Stream);
-                    break;
+                //case (SslProtocols.Ssl2):
+                //    SslStream ssl2Stream = CreateSslStream(certConfig);
+                //    result = ssl2Stream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Ssl2, false, asyncCallback, ssl2Stream);
+                //    break;
                 default:
                     var unknownSslStream = CreateSslStream(certConfig);
                     result = unknownSslStream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, secureProtocol, false, asyncCallback, unknownSslStream);
@@ -329,7 +325,7 @@ namespace SuperSocket.SocketEngine
                 OnSendError(queue, CloseReason.SocketError);
                 return;
             }
-            
+
             var nextPos = queue.Position + 1;
 
             //Has more data to send

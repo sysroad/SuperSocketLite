@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Text;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
 
 namespace SuperSocket.SocketEngine
 {
@@ -61,7 +54,7 @@ namespace SuperSocket.SocketEngine
                 client.IOControl(IOControlCode.KeepAliveValues, m_KeepAliveOptionValues, m_KeepAliveOptionOutValues);
 
             client.NoDelay = m_NoDelay;
-            client.LingerState = new LingerOption(enable:false, seconds:0); // socket 종료하면 즉시 제거한다.
+            client.LingerState = new LingerOption(enable: false, seconds: 0); // socket 종료하면 즉시 제거한다.
             //client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true); //닷넷코어에서 사용 불가
 
             return this.AppServer.CreateAppSession(session);

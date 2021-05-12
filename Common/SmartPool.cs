@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace SuperSocket.Common
@@ -61,7 +57,7 @@ namespace SuperSocket.Common
         /// <param name="maxPoolSize">The max size of the pool.</param>
         /// <param name="sourceCreator">The source creator.</param>
         /// <returns></returns>
-        void Initialize(int minPoolSize, int maxPoolSize, ISmartPoolSourceCreator<T> sourceCreator);        
+        void Initialize(int minPoolSize, int maxPoolSize, ISmartPoolSourceCreator<T> sourceCreator);
 
         /// <summary>
         /// Pushes the specified item into the pool.
@@ -248,8 +244,7 @@ namespace SuperSocket.Common
 
             m_ItemsSource = new ISmartPoolSource[n + 1];
 
-            T[] items;
-            m_ItemsSource[0] = sourceCreator.Create(minPoolSize, out items);
+            m_ItemsSource[0] = sourceCreator.Create(minPoolSize, out T[] items);
             m_CurrentSourceCount = 1;
 
             for (var i = 0; i < items.Length; i++)
@@ -331,8 +326,7 @@ namespace SuperSocket.Common
         {
             var newItemsCount = Math.Min(m_TotalItemsCount, m_MaxPoolSize - m_TotalItemsCount);
 
-            T[] items;
-            m_ItemsSource[m_CurrentSourceCount++] = m_SourceCreator.Create(newItemsCount, out items);
+            m_ItemsSource[m_CurrentSourceCount++] = m_SourceCreator.Create(newItemsCount, out T[] items);
 
             m_TotalItemsCount += newItemsCount;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using System.IO;
 using System.Linq;
@@ -194,9 +193,8 @@ namespace SuperSocket.Common
             for (int i = 0; i < targetProperties.Length; i++)
             {
                 var p = targetProperties[i];
-                PropertyInfo sourceProperty;
 
-                if (sourcePropertiesDict.TryGetValue(p.Name, out sourceProperty))
+                if (sourcePropertiesDict.TryGetValue(p.Name, out PropertyInfo sourceProperty))
                 {
                     if (sourceProperty.PropertyType != p.PropertyType)
                         continue;

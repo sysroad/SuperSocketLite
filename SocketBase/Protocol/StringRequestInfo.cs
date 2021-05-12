@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SuperSocket.SocketBase.Protocol
+﻿namespace SuperSocket.SocketBase.Protocol
 {
     /// <summary>
     /// String type request information
@@ -33,7 +28,7 @@ namespace SuperSocket.SocketBase.Protocol
         /// <returns></returns>
         public string GetFirstParam()
         {
-            if(Parameters.Length > 0)
+            if (Parameters.Length > 0)
                 return Parameters[0];
 
             return string.Empty;

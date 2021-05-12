@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Authentication;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
-using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine.AsyncSocket;
 
 namespace SuperSocket.SocketEngine
@@ -91,8 +85,7 @@ namespace SuperSocket.SocketEngine
         {
             //Get the socket for the accepted client connection and put it into the 
             //ReadEventArg object user token
-            SocketAsyncEventArgsProxy socketEventArgsProxy;
-            if (!m_ReadWritePool.TryPop(out socketEventArgsProxy))
+            if (!m_ReadWritePool.TryPop(out SocketAsyncEventArgsProxy socketEventArgsProxy))
             {
                 AppServer.AsyncRun(client.SafeClose);
                 if (AppServer.Logger.IsErrorEnabled)
@@ -194,7 +187,7 @@ namespace SuperSocket.SocketEngine
 
             if (pool == null || serverState == ServerState.Stopping || serverState == ServerState.NotStarted)
             {
-                if(!Environment.HasShutdownStarted && !AppDomain.CurrentDomain.IsFinalizingForUnload())
+                if (!Environment.HasShutdownStarted && !AppDomain.CurrentDomain.IsFinalizingForUnload())
                     args.Dispose();
                 return;
             }

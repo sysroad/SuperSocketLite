@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SuperSocket.SocketBase.Metadata;
-
-namespace SuperSocket.SocketBase.Metadata
+﻿namespace SuperSocket.SocketBase.Metadata
 {
     /// <summary>
     /// Server StatusInfo Metadata
@@ -46,8 +40,8 @@ namespace SuperSocket.SocketBase.Metadata
         /// </summary>
         public const string MaxCompletionPortThreads = "MaxCompletionPortThreads";
 
-        
-        
+
+
 
         /// <summary>
         /// The started time.
@@ -98,6 +92,6 @@ namespace SuperSocket.SocketBase.Metadata
         /// The total sending queue items.
         /// </summary>
         public const string TotalSendingQueueItems = "TotalSendingQueueItems";
-        
+
     }
 }

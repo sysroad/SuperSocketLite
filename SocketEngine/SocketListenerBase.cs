@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 
@@ -40,7 +37,7 @@ namespace SuperSocket.SocketEngine
         {
             var handler = Error;
 
-            if(handler != null)
+            if (handler != null)
                 handler(this, e);
         }
 

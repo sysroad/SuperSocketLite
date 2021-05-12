@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading;
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Protocol;
@@ -22,7 +18,7 @@ namespace SuperSocket.SocketBase
     public abstract class AppSession<TAppSession, TRequestInfo> : IAppSession, IAppSession<TAppSession, TRequestInfo>
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
         where TRequestInfo : class, IRequestInfo
-    {        
+    {
         /// <summary>
         /// Gets the app server instance assosiated with the session.
         /// </summary>
@@ -161,8 +157,8 @@ namespace SuperSocket.SocketBase
 
         IReceiveFilter<TRequestInfo> m_ReceiveFilter;
 
-        
-        
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSession&lt;TAppSession, TRequestInfo&gt;"/> class.
         /// </summary>
@@ -187,7 +183,7 @@ namespace SuperSocket.SocketBase
             SessionID = socketSession.SessionID;
             m_Connected = true;
             m_ReceiveFilter = castedAppServer.ReceiveFilterFactory.CreateFilter(appServer, this, socketSession.RemoteEndPoint);
-                        
+
             var filterInitializer = m_ReceiveFilter as IReceiveFilterInitializer;
             if (filterInitializer != null)
                 filterInitializer.Initialize(castedAppServer, this);
@@ -210,7 +206,7 @@ namespace SuperSocket.SocketBase
         /// </summary>
         protected virtual void OnInit()
         {
-            
+
         }
 
         /// <summary>
@@ -277,7 +273,7 @@ namespace SuperSocket.SocketBase
             Close(CloseReason.ServerClosing);
         }
 
-        
+
         /// <summary>
         /// Try to send the message to client.
         /// </summary>
@@ -582,11 +578,10 @@ namespace SuperSocket.SocketBase
         /// </returns>
         int IAppSession.ProcessRequest(byte[] readBuffer, int offset, int length, bool toBeCopied)
         {
-            int rest, offsetDelta;
 
             while (true)
             {
-                var requestInfo = FilterRequest(readBuffer, offset, length, toBeCopied, out rest, out offsetDelta);
+                var requestInfo = FilterRequest(readBuffer, offset, length, toBeCopied, out int rest, out int offsetDelta);
 
                 if (requestInfo != null)
                 {
@@ -621,9 +616,9 @@ namespace SuperSocket.SocketBase
         where TAppSession : AppSession<TAppSession, StringRequestInfo>, IAppSession, new()
     {
 
-        private bool m_AppendNewLineForResponse = false;
+        private readonly bool m_AppendNewLineForResponse = false;
 
-        private static string m_NewLine = "\r\n";
+        private static readonly string m_NewLine = "\r\n";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSession&lt;TAppSession&gt;"/> class.

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SuperSocket.Common;
 using SuperSocket.SocketBase.Logging;
 
 namespace SuperSocket.SocketBase
@@ -61,6 +57,14 @@ namespace SuperSocket.SocketBase
                 return;
 
             logger.Debug(string.Format(m_SessionInfoTemplate, session.SessionID, session.RemoteEndPoint) + Environment.NewLine + message);
+        }
+
+        public static void Verbose(this ILog logger, ISessionBase session, string message)
+        {
+            if (!logger.IsVerboseEnabled)
+                return;
+
+            logger.Verbose(string.Format(m_SessionInfoTemplate, session.SessionID, session.RemoteEndPoint) + Environment.NewLine + message);
         }
 
         private const string m_PerfLogName = "Perf";

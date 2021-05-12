@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Text;
 using SuperSocket.SocketBase.Protocol;
 
@@ -33,7 +32,7 @@ namespace SuperSocket.SocketEngine.Protocol
         protected HttpReceiveFilterBase()
             : base(NewLine)
         {
-            
+
         }
 
         /// <summary>

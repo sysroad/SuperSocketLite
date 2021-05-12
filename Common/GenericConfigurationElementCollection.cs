@@ -1,4 +1,3 @@
-using System;
 using System.Configuration;
 using System.Collections.Generic;
 
@@ -28,7 +27,7 @@ namespace SuperSocket.Common
                 {
                     base.BaseRemoveAt(index);
                 }
-                this.BaseAdd(index, value as ConfigurationElement);
+                this.BaseAdd(index, value);
             }
         }
 
@@ -40,7 +39,7 @@ namespace SuperSocket.Common
         /// </returns>
         protected override ConfigurationElement CreateNewElement()
         {
-            return new TConfigElement() as ConfigurationElement;
+            return new TConfigElement();
         }
 
         /// <summary>

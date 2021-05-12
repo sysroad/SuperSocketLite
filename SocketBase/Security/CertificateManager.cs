@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using SuperSocket.Common;
 using SuperSocket.SocketBase.Config;
 
 namespace SuperSocket.SocketBase.Security
@@ -26,7 +22,7 @@ namespace SuperSocket.SocketBase.Security
                     filePath = relativePathHandler(cerConfig.FilePath);
                 }
 
-                
+
                 return new X509Certificate2(filePath, cerConfig.Password, cerConfig.KeyStorageFlags);
             }
             else

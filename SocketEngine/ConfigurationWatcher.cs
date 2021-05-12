@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 
@@ -89,7 +85,7 @@ namespace SuperSocket.SocketEngine
             {
                 config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 var loggerProvider = bootstrap as ILoggerProvider;
 

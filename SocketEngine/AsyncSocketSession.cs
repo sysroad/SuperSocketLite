@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine.AsyncSocket;
 
 namespace SuperSocket.SocketEngine
 {
     class AsyncSocketSession : SocketSession, IAsyncSocketSession
     {
-        private bool m_IsReset;
+        private readonly bool m_IsReset;
 
         private SocketAsyncEventArgs m_SocketEventArgSend;
 

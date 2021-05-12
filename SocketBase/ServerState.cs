@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SuperSocket.SocketBase
+﻿namespace SuperSocket.SocketBase
 {
     /// <summary>
     /// Server's state enum class
@@ -47,9 +45,9 @@ namespace SuperSocket.SocketBase
         public const int NotStarted = 2;
 
         public const int Starting = 3;
-        
+
         public const int Running = 4;
-        
+
         public const int Stopping = 5;
     }
 }

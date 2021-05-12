@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Reflection;
 
@@ -12,7 +9,7 @@ namespace SuperSocket.SocketEngine
     /// </summary>
     public class AssemblyImport : MarshalByRefObject
     {
-        private string m_ImportRoot;
+        private readonly string m_ImportRoot;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyImport"/> class.
@@ -36,5 +33,5 @@ namespace SuperSocket.SocketEngine
             return Assembly.LoadFrom(assemblyFilePath);
         }
     }
-    
+
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
-using System.Security.Authentication;
-using System.Text;
 using SuperSocket.Common;
 
 namespace SuperSocket.SocketBase.Config
@@ -91,7 +89,7 @@ namespace SuperSocket.SocketBase.Config
         public ServerConfig(IServerConfig serverConfig)
         {
             serverConfig.CopyPropertiesTo(this);
-            
+
             this.Options = serverConfig.Options;
             this.OptionElements = serverConfig.OptionElements;
 
@@ -131,7 +129,7 @@ namespace SuperSocket.SocketBase.Config
             SessionSnapshotInterval = DefaultSessionSnapshotInterval;
         }
 
-        
+
 
         /// <summary>
         /// Gets/sets the name of the server type of this appServer want to use.

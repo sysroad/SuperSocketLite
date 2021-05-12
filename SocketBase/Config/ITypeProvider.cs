@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SuperSocket.SocketBase.Config
+﻿namespace SuperSocket.SocketBase.Config
 {
     /// <summary>
     /// TypeProvider's interface

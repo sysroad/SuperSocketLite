@@ -56,7 +56,7 @@ namespace SuperSocket.SocketEngine.Protocol
             {
                 prevMatched = m_BeginSearchState.Matched;
                 int pos = readBuffer.SearchMark(offset, length, m_BeginSearchState, out totalParsed);
-                
+
                 if (pos < 0)
                 {
                     //Don't cache invalid data
@@ -71,7 +71,7 @@ namespace SuperSocket.SocketEngine.Protocol
                 else //Found the matched begin mark
                 {
                     //But not at the beginning
-                    if(pos != offset)
+                    if (pos != offset)
                     {
                         State = FilterState.Error;
                         return NullRequestInfo;
@@ -101,14 +101,13 @@ namespace SuperSocket.SocketEngine.Protocol
             while (true)
             {
                 var prevEndMarkMatched = m_EndSearchState.Matched;
-                var parsedLen = 0;
-                var endPos = readBuffer.SearchMark(searchEndMarkOffset, searchEndMarkLength, m_EndSearchState, out parsedLen);
+                var endPos = readBuffer.SearchMark(searchEndMarkOffset, searchEndMarkLength, m_EndSearchState, out int parsedLen);
 
                 //Haven't found end mark
                 if (endPos < 0)
                 {
                     rest = 0;
-                    if(prevMatched > 0)//Also cache the prev matched begin mark
+                    if (prevMatched > 0)//Also cache the prev matched begin mark
                         AddArraySegment(m_BeginSearchState.Mark, 0, prevMatched, false);
                     AddArraySegment(readBuffer, offset, length, toBeCopied);
                     return NullRequestInfo;
@@ -122,7 +121,7 @@ namespace SuperSocket.SocketEngine.Protocol
                 if (BufferSegments.Count > 0)
                     BufferSegments.CopyTo(commandData, 0, 0, BufferSegments.Count);
 
-                if(prevMatched > 0)
+                if (prevMatched > 0)
                     Array.Copy(m_BeginSearchState.Mark, 0, commandData, BufferSegments.Count, prevMatched);
 
                 Array.Copy(readBuffer, offset, commandData, BufferSegments.Count + prevMatched, totalParsed);
@@ -143,7 +142,7 @@ namespace SuperSocket.SocketEngine.Protocol
                 }
 
                 //Not match
-                if(prevMatched > 0)//Also cache the prev matched begin mark
+                if (prevMatched > 0)//Also cache the prev matched begin mark
                     AddArraySegment(m_BeginSearchState.Mark, 0, prevMatched, false);
                 AddArraySegment(readBuffer, offset, length, toBeCopied);
                 return NullRequestInfo;

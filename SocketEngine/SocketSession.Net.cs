@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
-using System.Text;
 using SuperSocket.SocketBase;
 
 
@@ -24,10 +21,9 @@ namespace SuperSocket.SocketEngine
         /// <param name="callerLineNumber">The caller line number.</param>
         protected void LogError(Exception exception, [CallerMemberName] string caller = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = -1)
         {
-            int socketErrorCode;
 
             //This exception is ignored, needn't log it
-            if (IsIgnorableException(exception, out socketErrorCode))
+            if (IsIgnorableException(exception, out int socketErrorCode))
                 return;
 
             var message = socketErrorCode > 0 ? string.Format(m_GeneralSocketErrorMessage, socketErrorCode) : m_GeneralErrorMessage;
@@ -47,10 +43,9 @@ namespace SuperSocket.SocketEngine
         /// <param name="callerLineNumber">The caller line number.</param>
         protected void LogError(string message, Exception exception, [CallerMemberName] string caller = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = -1)
         {
-            int socketErrorCode;
 
             //This exception is ignored, needn't log it
-            if (IsIgnorableException(exception, out socketErrorCode))
+            if (IsIgnorableException(exception, out int socketErrorCode))
                 return;
 
             AppSession.Logger.Error(this

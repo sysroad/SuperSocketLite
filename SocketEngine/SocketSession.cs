@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Protocol;
 
 namespace SuperSocket.SocketEngine
 {
@@ -54,7 +49,7 @@ namespace SuperSocket.SocketEngine
 
         private bool AddStateFlag(int stateValue, bool notClosing)
         {
-            while(true)
+            while (true)
             {
                 var oldState = m_State;
 
@@ -69,7 +64,7 @@ namespace SuperSocket.SocketEngine
 
                 var newState = m_State | stateValue;
 
-                if(Interlocked.CompareExchange(ref m_State, newState, oldState) == oldState)
+                if (Interlocked.CompareExchange(ref m_State, newState, oldState) == oldState)
                     return true;
             }
         }
@@ -96,12 +91,12 @@ namespace SuperSocket.SocketEngine
 
         private void RemoveStateFlag(int stateValue)
         {
-            while(true)
+            while (true)
             {
                 var oldState = m_State;
                 var newState = m_State & (~stateValue);
 
-                if(Interlocked.CompareExchange(ref m_State, newState, oldState) == oldState)
+                if (Interlocked.CompareExchange(ref m_State, newState, oldState) == oldState)
                     return;
             }
         }
@@ -115,7 +110,7 @@ namespace SuperSocket.SocketEngine
 
         private ISmartPool<SendingQueue> m_SendingQueuePool;
 
-        
+
         public SocketSession(Socket client)
             : this(Guid.NewGuid().ToString())
         {
@@ -141,8 +136,7 @@ namespace SuperSocket.SocketEngine
             if (m_SendingQueuePool == null)
                 m_SendingQueuePool = ((SocketServerBase)((ISocketServerAccessor)appSession.AppServer).SocketServer).SendingQueuePool;
 
-            SendingQueue queue;
-            if (m_SendingQueuePool.TryGet(out queue))
+            if (m_SendingQueuePool.TryGet(out SendingQueue queue))
             {
                 m_SendingQueue = queue;
                 queue.StartEnqueue();
@@ -331,17 +325,15 @@ namespace SuperSocket.SocketEngine
                 }
             }
 
-            Socket client;
 
-            if (IsInClosingOrClosed && TryValidateClosedBySocket(out client))
+            if (IsInClosingOrClosed && TryValidateClosedBySocket(out Socket client))
             {
                 OnSendEnd();
                 return;
             }
 
-            SendingQueue newQueue;
 
-            if (!m_SendingQueuePool.TryGet(out newQueue))
+            if (!m_SendingQueuePool.TryGet(out SendingQueue newQueue))
             {
                 OnSendEnd(CloseReason.InternalError, true);
                 AppSession.Logger.Error("There is no enougth sending queue can be used.");
@@ -373,7 +365,7 @@ namespace SuperSocket.SocketEngine
             queue.StopEnqueue();
 
             if (queue.Count == 0)
-            {                
+            {
                 m_SendingQueuePool.Push(queue);
                 OnSendEnd(CloseReason.InternalError, true);
                 AppSession.Logger.Error("There is no data to be sent in the queue.");
@@ -403,10 +395,9 @@ namespace SuperSocket.SocketEngine
 
             if (IsInClosingOrClosed)
             {
-                Socket client;
 
                 //has data is being sent and the socket isn't closed
-                if (newQueue.Count > 0 && !TryValidateClosedBySocket(out client))
+                if (newQueue.Count > 0 && !TryValidateClosedBySocket(out Socket client))
                 {
                     StartSend(newQueue, newQueue.TrackID, false);
                     return;
@@ -415,7 +406,7 @@ namespace SuperSocket.SocketEngine
                 OnSendEnd();
                 return;
             }
-            
+
             if (newQueue.Count == 0)
             {
                 OnSendEnd();
@@ -489,10 +480,9 @@ namespace SuperSocket.SocketEngine
             if (!TryAddStateFlag(SocketState.InClosing))
                 return;
 
-            Socket client;
 
             //No need to clean the socket instance
-            if (TryValidateClosedBySocket(out client))
+            if (TryValidateClosedBySocket(out Socket client))
                 return;
 
             //Some data is in sending
@@ -614,9 +604,8 @@ namespace SuperSocket.SocketEngine
                     // so we check if the socket instance is alive now
                     if (forSend)
                     {
-                        Socket client;
 
-                        if (!TryValidateClosedBySocket(out client))
+                        if (!TryValidateClosedBySocket(out Socket client))
                         {
                             var sendingQueue = m_SendingQueue;
                             // No data to be sent
